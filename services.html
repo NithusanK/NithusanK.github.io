@@ -4,17 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Services</title>
+    <title>Home</title>
     <!-- CSS Section -->
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="./Content/app.css">
+
 </head>
+
+<style>
+    .card 
+    {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        margin: 8px;
+    }
+    .column 
+    {
+        float: left;
+        width: 33.3%;
+        margin-bottom: 16px;
+        padding: 0 8px;
+    }
+
+</style>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-              <a class="navbar-brand" href="index.html"><i class="fas fa-spider"></i> WEBD6201</a>
+              <a class="navbar-brand" href="index.html"><i class="fab fa-accusoft"></i> WEBD6201 Lab 1</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -24,7 +42,7 @@
                     <a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="products.html"><i class="fas fa-project-diagram"></i></i> Products</a>
+                    <a class="nav-link" href="projects.html" id="ProjectID"><i class="fas fa-th"></i> Products</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="services.html"><i class="fas fa-map-signs"></i> Services</a>
@@ -40,12 +58,48 @@
             </div>
           </nav>
     </header>
+
+    <nav class="navbar fixed-bottom navbar-light bg-light">
+        <a class="navbar-brand" href="#" id="bottomNav">Fixed bottom</a>
+    </nav>
+
     <div class="container">
-        <h1></i>Our Services</i></h1>
+        <h1 class="mb-5">Our Services</h1>
+        <div class="column">
+            <div class="card">
+              <div class="container">
+                <h2>Custom Web Design</h2>
+                <p>We allow our clients to provide insight in their desired web pages, providing the best experience and style throughout the entire experience.</p>
+                <img src="./Content/img/web-design.jpg" alt="Nithusan" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+              <div class="container">
+                <h2>Multi-language Debugging</h2>
+                <p>Our team is able to provide insights in debugging new or existing projects in most languages</p>
+                <img src="./Content/img/debugging.png" alt="Nithusan" style="width: 100%;">
+              </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+              <div class="container">
+                <h2>Mobile and Web Deployment</h2>
+                <p>We excel in deploying mobile and web projects on most platforms for easy access and convenience for clients and consumers.</p>
+                <img src="./Content/img/deployment.png" alt="Nithusan" style="width: 100%;">
+              </div>
+            </div>
+        </div>
     </div>
+    
     <!-- Scripting Section -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
     <script src="./Scripts/app.js"></script>
 </body>
 </html>
