@@ -9,34 +9,12 @@
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="./Content/app.css">
-
 </head>
-
-<style>
-    *
-    {
-        margin: 0;
-        padding: 0;
-    }
-    .background-image
-    {
-        background-image: url("./Content/img/background-image.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        height: 100vh;
-    }
-    .centered {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-</style>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-              <a class="navbar-brand" href="index.html"><i class="fab fa-accusoft"></i> WEBD6201 Lab 1</a>
+              <a class="navbar-brand" href="index.html"><i class="fas fa-spider"></i> WEBD6201</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -46,7 +24,7 @@
                     <a class="nav-link active" aria-current="page" href="index.html"><i class="fas fa-home"></i> Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="projects.html" id="ProjectID"><i class="fas fa-th"></i> Products</a>
+                    <a class="nav-link" href="products.html"><i class="fas fa-project-diagram"></i></i> Products</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="services.html"><i class="fas fa-map-signs"></i> Services</a>
@@ -62,20 +40,16 @@
             </div>
           </nav>
     </header>
-    <div class="background-image"></div>
-
-    <nav class="navbar fixed-bottom navbar-light bg-light">
-        <a class="navbar-brand" href="#" id="bottomNav">Fixed bottom</a>
-    </nav>
-
     <main class="container">
-        <h1 class="centered" style="color:azure">Welcome To Our Site!</h1>
+        <h1 class="mb-5">Welcome to Our Site</h1>
+        <button id="AboutUsButton" class="btn btn-primary">Learn more about us</button>
     </main>
-    
     <!-- Scripting Section -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
+
+    <script src="./Scripts/contact.js"></script>
     <script src="./Scripts/app.js"></script>
 </body>
 </html>
