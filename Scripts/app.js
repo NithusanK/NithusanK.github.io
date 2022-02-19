@@ -1,86 +1,70 @@
 // IIFE -- Immediately Invoked Function Expression
 // AKA - Anonymous Self-Executing Function
+
+"use strict";
 (function()
 {
-    
+    /**
+     *This function uses AJAX to open a connection to the server and returns
+     *the data payload to the callback function
+     * @param {string} method
+     * @param {string} url
+     * @param {function} callback
+     */
+    function AjaxRequest(method, url, callback)
+    {
+        // AJAX Steps
+        // step 1 - instantiate an XHR Object
+        let XHR = new XMLHttpRequest();
+
+        // step 2 - add an event listener for readystatechange
+        XHR.addEventListener("readystatechange", () =>
+        {
+            if(XHR.readyState === 4 && XHR.status === 200)
+            {
+                if(typeof callback === "function")
+                {
+                    callback(XHR.responseText); 
+                }
+                else
+                {
+                    console.error("ERROR: callback not a function")
+                }
+            }
+        });
+
+        XHR.open(method, url);
+
+        XHR.send();
+    }
+
+    /**
+     *This function loads the header.html content into a page
+     *
+     * @param {string}data
+     */
+    function LoadHeader(data)
+    {
+        $("header").html(data);
+        $(`li>a:contains(${document.title})`).addClass("active"); //updating active link
+        CheckLogin();
+    }
+
     function DisplayHomePage()
     {
-        //old code
-        // console.log("Home Page");
-        // let AboutUsButton = document.getElementById("AboutUsButton");
-        // AboutUsButton.addEventListener("click", () =>
-        // {
-        //     location.href = "about.html";
-        // });
+        console.log("Home Page")
 
-        // 1) Fattest Memory Footprint
-        //jQuery way - get all elements with an id of AboutUsButton and for each element add a "click" event
         $("#AboutUsButton").on("click", () =>
         {
             location.href = "about.html";
         });
 
-        // 2) Second Fattest - because it returns a collection of elements
-        //Javascript way - get all elements wuth an id of AboutUsButton for each element, loop...
-        // document.querySelectorAll("#AboutUsButton").forEach(element => 
-        // {
-        //     //for each element, add a "click" event
-        //     element.addEventListener("click", () =>
-        //     {
-        //       location.href = "about.html";  
-        //     });
-        // });
-        
-        // 3) Pretty Lean
-        //JavaScript way - get an element that matches an id of AboutUsButton and add a "click" event
-        // document.querySelector("#AboutUsButton").addEventListener("click", () =>
-        // {
-        //     location.href = "about.html";  
-        // });
-
-        
-
-
-        // Step 1 - get a reference to an entry point(s) (insertion / deletion)
-        //let MainContent = document.getElementsByTagName("main")[0];
-        //let DocumentBody = document.body;
-
-        // Step 2 - Create an HTML Element in memory
-        // let MainParagraph = document.createElement("p");
-        // let Article = document.createElement("article");
-        // let ArticleParagraph = `<p id="ArticleParagraph" class="mt-3">This is the Article Paragraph</p>`;
-
-        // Step 3 - Configure new Element
-        // MainParagraph.setAttribute("id", "MainParagraph");
-        // MainParagraph.setAttribute("class", "mt-3");
-        // let FristString = "This is";
-        // let SecondString = `${FristString} the Main Paragraph`;
-        // MainParagraph.textContent = SecondString;
-        // Article.setAttribute("class", "container");
-
-        // Step 4 - perform insertion / deletion
-
-        // example of insert after (append)
-        //MainContent.appendChild(MainParagraph);
-        //Article.innerHTML = ArticleParagraph;
         $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph</p>`);
         $("body").append(`<article class="container">
         <p id="ArticleParagraph" class="mt-3">This is the Article Paragraph</p>
         </article>`);
 
-        // example of insert before
-        //MainContent.before(MainParagraph);
-
-        // example of deletion
-        //document.getElementById("AboutUsButton").remove();
-        //AboutUsButton.remove();
-
-        // ES6 and HTML5 => Template Strings => "Super Strings"
-
-        //Test new core.Contact Class
-        let darryl = new core.Contact("Darryl Olsen", "555-555-5555", "darryl.olsen@example.com");
-        console.log(darryl.toString());
-
+        
     }
 
     function DisplayProductsPage()
@@ -167,13 +151,21 @@
 
             if(subscribeCheckbox.checked)
             {
-                AddContact(fullName.value, contactNumber.value, emailAddress.value);
+                let contact = new core.Contact(fullName.value, contactNumber.value, emailAddress.value);
+                if(contact.serialize())
+                {
+                    let key = contact.FullName.substring(0, 1) + Date.now();
+
+                    localStorage.setItem(key, contact.serialize());
+                }
             }
         });
     }
 
     function DisplayContactListPage()
     {
+        console.log("Contact-List Page");
+
         if(localStorage.length > 0)
         {
             let contactList = document.getElementById("contactList");
@@ -303,6 +295,82 @@
     function DisplayLoginPage()
     {
         console.log("Login Page");
+        let messageArea = $("#messageArea");
+        messageArea.hide();
+
+        $("#loginButton").on("click", function()
+        {
+            let success = false;
+
+            //create an empty user object
+            let newUser = new core.User();
+
+            //use JQuery shortcut to load the users.json file
+            $.get("./Data/users.json", function(data)
+            {
+                //for every user in the users,json file, loop
+                for (const user of data.users)
+                {
+                    //check if the username and passwprd entered matched the user data
+                    if(username.value == user.Username && password.value == user.Password)
+                    {
+                        //get the user data from file and assign to empty user object
+                        newUser.fromJSON(user);
+                        success = true;
+                        break;
+                    }
+                }
+
+                //if username and password matches, then we have success -> perform login sequence
+                if(success)
+                {
+                    //add user to session storage
+                    sessionStorage.setItem("user", newUser.serialize());
+
+                    //hide any error message
+                    messageArea.removeAttr("class").hide();
+
+                    //redirect user to secure area of site - contant-list.html
+                    location.href = "contact-list.html";
+                }
+                else
+                {
+                    //display error message
+                    $("#username").trigger("focus").trigger("select");
+                    messageArea.addClass("alert alert-danger").text("Error: Invalid Login Credentials").show();
+                }
+            });
+        });
+
+        $("#cancelButton").on("click", function()
+        {
+            //clear the login form
+            document.forms[0].reset();
+
+            //return to the home page
+            location.href = "index.html";
+        });
+    }
+
+    function CheckLogin()
+    {
+        //if the user is logged in, then...
+        if(sessionStorage.getItem("user"))
+        {
+            //swap out login link for logout
+            $("#login").html(
+                `<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`
+            );
+
+            $("#logout").on("click", function()
+            {
+                //perform logout
+                sessionStorage.clear();
+
+                //redirect to login page
+                location.href = "login.html";
+            });
+        }
     }
 
     function DisplayRegisterPage()
@@ -314,6 +382,8 @@
     function Start()
     {
         console.log("App Started!");
+
+        AjaxRequest("GET", "header.html", LoadHeader);
 
         switch(document.title)
         {
@@ -345,6 +415,8 @@
                 DisplayRegisterPage();
                 break;
         }
+
+
 
     }
 

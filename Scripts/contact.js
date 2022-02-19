@@ -1,4 +1,4 @@
-(function (core) {
+(function (core){
 
     class Contact
     {
@@ -74,6 +74,3 @@
  
     core.Contact = Contact;
 })(core || (core = {}));
-
-
-
