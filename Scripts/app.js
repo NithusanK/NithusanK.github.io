@@ -38,6 +38,8 @@
         XHR.send();
     }
 
+    
+
     /**
      *This function loads the header.html content into a page
      *
@@ -357,6 +359,13 @@
         //if the user is logged in, then...
         if(sessionStorage.getItem("user"))
         {
+            //display username before login button taken from users.json
+            let username = sessionStorage.getItem("user").split(",")[0];
+
+            $("#login").before(
+                `<li class="nav-item"><a id="username" class="nav-link" href="#"><i class="fas fa-solid fa-user"></i> ${username}</a>`
+            );
+
             //swap out login link for logout
             $("#login").html(
                 `<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`
@@ -373,9 +382,110 @@
         }
     }
 
+    class User
+    {
+        constructor(firstName = "", lastName = "", username = "", email = "", password = "")
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Username = username;
+            this.Email = email;
+            this.Password = password
+        }
+
+        toString()
+        {
+            return `First Name : ${this.FirstName}\nLast Name : ${this.LastName}\nUsername : ${this.Username}\nEmail : ${this.Email}\nPassword : ${this.Password}`;
+        }
+
+        // toJSON()
+        // {
+        //     return {
+        //         "FirstName": this.FirstName,
+        //         "LastName": this.LastName,
+        //         "Username": this.Username,
+        //         "Email": this.Email,
+        //         "Password": this.Password
+        //     }
+        // }
+
+        // fromJSON(data)
+        // {
+        //     this.FirstName = data.FirstName;
+        //     this.LastName = data.LastName;
+        //     this.Username = data.Username;
+        //     this.Email = data.Email;
+        //     this.Password = data.Password;
+            
+        // }
+
+        serialize()
+            {
+                if(this.FirstName !== "" && this.LastName !== "" && this.Username !== "" && this.Email !== "" && this.Password !== "")
+                {
+                    return `${this.FirstName},${this.LastName},${this.Username},${this.Email},${this.Password}`;
+                }
+                else
+                {
+                    console.error("One or more properties of the User Object are missing or invalid");
+                    return null;
+                }
+            }
+
+            deserialize(data) // assume that data is a comma-separated list of properties (strings)
+            {
+                let propertyArray = data.split(",");
+                this.FirstName = propertyArray[0];
+                this.LastName = propertyArray[1];
+                this.Username = propertyArray[2];
+                this.Email = propertyArray[3];
+                this.Password = propertyArray[4];
+            }
+    }
+
+    function RegisterPageValidation()
+    {
+        ValidateField("firstName", /[a-zA-Z]{2,}/, "Please enter a valid First Name. This must include at least two characters.");
+        ValidateField("lastName", /[a-zA-Z]{2,}/, "Please enter a valid Last Name. This must include at least two characters.");
+        ValidateField("emailAddress", /^[a-zA-Z0-9._-]{8,}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/, "Please enter a valid Email Address.");
+        ValidateField("password", /^[0-9A-Za-z]{6,}$/, "Password must contain at least 6 characters.");
+    }
+
     function DisplayRegisterPage()
     {
+        let messageArea = $("#messageArea");
+        messageArea.hide();
+
         console.log("Register Page")
+
+        RegisterPageValidation();
+        
+
+        $("#submitButton").on("click", (event) =>
+        {
+            //prevent default
+            event.preventDefault();
+
+            let firstName = $("#FirstName").val();
+            let lastName = $("#LastName").val();
+            let username = $("#Username").val();
+            let email = $("#Email").val();
+            let password = $("#Password").val();
+            let confirmPassword = $("#ConfirmPassword").val();
+
+            if(password = confirmPassword)
+            {
+                let newUser = new User(firstName, lastName, username, email, password);
+
+                //print to console
+                console.log(newUser.toString());
+            }
+            else
+            {
+                //taken from ValidateField()
+                messageArea.addClass("alert alert-danger").text("Passwords must match.").show();
+            }
+        });
     }
 
     //named function option
